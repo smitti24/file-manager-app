@@ -1,0 +1,90 @@
+<main class="max-w-7xl md:py-10 sm:px-0 px-6 mx-auto flex justify-center items-center">
+  <div class="relative w-full max-w-screen-xl mx-auto max-h-screen">
+    <h1 class="text-4xl text-indigo-500 font-medium text-center m-4">File Manager</h1>
+    <div class="flex justify-between sm:mx-4">
+      <div class="mb-4">
+        <button class="bg-indigo-500 text-white px-2 rounded-lg disabled:bg-slate-500 disabled:text-slate-300" (click)="goBack()" [disabled]="!folderStack.length">
+          <i class="fa fa-angle-left text-2xl"></i> </button>
+      </div>
+          <div class="relative">
+            <button class="bg-gray-950 text-indigo-500 p-2 rounded-lg" (click)="showDropdown = !showDropdown">
+              Number of records: {{numberOfRecords}}
+              <i *ngIf="!showDropdown" class="fa fa-caret-down"></i>
+              <i *ngIf="showDropdown" class="fa fa-caret-up"></i>
+            </button>
+            <div class="absolute right-0 z-10 w-48 mt-2 py-2 bg-gray-950 rounded-lg shadow-lg hover:cursor-pointer" [class.hidden]="!showDropdown" >
+              <a class="block px-4 py-2 text-indigo-500 hover:bg-gray-900" (click)="selectNumberOfRecords(5)">5</a>
+              <a class="block px-4 py-2 text-indigo-500 hover:bg-gray-900" (click)="selectNumberOfRecords(10)">10</a>
+              <a class="block px-4 py-2 text-indigo-500 hover:bg-gray-900" (click)="selectNumberOfRecords(15)">15</a>
+            </div>
+          </div>
+    </div>
+
+    <div class="min-h-[300px] max-h-[600px] rounded-lg shadow-xl overflow-auto">
+      <table class="w-full text-left top-0 sticky">
+        <thead>
+          <tr>
+            <th class="sm:max-w-[100px]">Name</th>
+            <th class="sm:hidden">Size</th>
+            <th class="sm:hidden">Created Date</th>
+            <th class="sm:hidden">File Path</th>
+            <th class="max-w-[20px]"></th>
+          </tr>
+        </thead>
+        <tbody class="overflow-scroll">
+          <ng-container *ngIf="(files$ | async) as allFiles; else loading">
+            <tr class="text-white  "
+              [ngClass]="{'hover:cursor-pointer': file.type ==='directory', 'hover:bg-gray-200/20 hover:text-indigo-500': file.type ==='directory'}"
+              *ngFor="let file of allFiles.data!" (click)="file.type ==='directory' && getDirectoryDetails(file)">
+              <td class="py-4 px-6 font-medium xs:max-w-[100px] xs:overflow-hidden xs:text-truncate">
+                <div class="flex">
+                  <div *ngIf="file.type === 'file'">
+                    <i class="fa fa-file h-6 w-6 text-indigo-500"></i>
+                  </div>
+                  <div *ngIf="file.type === 'directory'">
+                    <i class="fa fa-folder h-6 w-6 text-indigo-500"></i>
+                  </div>
+                  <div class="sm:max-w-[100px] sm:truncate" [title]="file?.name">
+                    {{file?.name}}
+                  </div>
+                </div>
+              </td>
+              <td class="sm:hidden">{{file?.size | unit }}</td>
+              <td class="sm:hidden">{{file?.createdDate | date }}</td>
+              <td class="sm:hidden">{{file?.fullPath}}</td>
+              <td class="sm:max-w-[20px]">
+                <span *ngIf="isFileTypeSelectable(file)">
+                  <i class="fa fa-angle-right text-2xl text-indigo-500"></i>
+                </span>
+              </td>
+            </tr>
+          </ng-container>
+          <ng-template #loading>
+            <tr>
+              <tr class="text-white ">
+              <td class="py-4 px-6 font-medium xs:max-w-[100px] xs:overflow-hidden xs:text-truncate">
+                <div class="flex">
+                  <div class="sm:max-w-[100px] animate-pulse">
+                    ...
+                  </div>
+                </div>
+              </td>
+              <td class="sm:hidden animate-pulse">...</td>
+              <td class="sm:hidden animate-pulse">...</td>
+              <td class="sm:hidden animate-pulse">...</td>
+              <td class="max-w-[20px] animate-pulse">...</td>
+            </tr>
+          </ng-template>
+        </tbody>
+      </table>
+
+    </div>
+    <div class="flex justify-center mt-8">
+      <div class="flex items-center mb-8">
+        <button class=" text-white px-2 rounded-lg disabled:text-gray-500" (click)="previousPage()" [disabled]="currentPage === 1"><i class="fa fa-angle-left text-2xl "></i></button>
+        <span class="px-4">Page {{currentPage}} of {{getTotalPages((files$ | async)?.total!)}}</span>
+        <button class=" text-white px-2 rounded-lg disabled:text-gray-500" (click)="nextPage()" [disabled]="currentPage === getTotalPages((files$ | async)?.total!)"><i class="fa fa-angle-right text-2xl "></i></button>
+      </div>
+    </div>
+  </div>
+</main>
