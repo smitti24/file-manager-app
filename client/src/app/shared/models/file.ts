@@ -9,5 +9,13 @@ export interface File {
   size: number;
   createdDate: string;
   fullPath: string;
+  extension: string;
+  filePermissions: FileAccess;
   isSelected?: boolean;
+}
+
+export interface FileAccess {
+  read: boolean;
+  write: boolean;
+  execute: boolean;
 }

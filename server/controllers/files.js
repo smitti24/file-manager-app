@@ -1,17 +1,23 @@
 import fs from "fs";
 import { promisify } from "util";
+import  path from "path";
 
-const stat = promisify(fs.stat);
+const stats = promisify(fs.stat);
 const readdir = promisify(fs.readdir);
 const realpath = promisify(fs.realpath);
-
 const buildDirectoryProperties = async (currentWorkingDirectory, file) => {
   const directoryItem = currentWorkingDirectory
     ? `${currentWorkingDirectory}`
     : file;
 
-  let statsObj = await stat(directoryItem);
+  let statsObj = await stats(directoryItem);
   let fullPath = await realpath(directoryItem);
+  const fileExtension = path.extname(file);
+
+  const filePermissions = {};
+  filePermissions.read = Boolean(statsObj.mode & fs.constants.S_IRUSR);
+  filePermissions.write = Boolean(statsObj.mode & fs.constants.S_IWUSR);
+  filePermissions.execute = Boolean(statsObj.mode & fs.constants.S_IXUSR);
 
   const fileProprties = {
     name: file,
@@ -19,6 +25,8 @@ const buildDirectoryProperties = async (currentWorkingDirectory, file) => {
     type: statsObj.isFile() ? "file" : "directory",
     fullPath,
     createdDate: statsObj.birthtime,
+    filePermissions,
+    fileExtension
   };
 
   return fileProprties;

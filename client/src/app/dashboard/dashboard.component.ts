@@ -22,7 +22,13 @@ export class DashboardComponent implements OnInit {
     type: "",
     size: 0,
     createdDate: "",
-    fullPath: ""
+    fullPath: "",
+    extension: "",
+    filePermissions: {
+      read: false,
+      write: false,
+      execute: false
+    }
   });
   selectedFile$ = this.selectedFile.asObservable();
 

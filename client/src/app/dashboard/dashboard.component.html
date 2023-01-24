@@ -45,7 +45,15 @@
                     <i class="fa fa-folder h-6 w-6 text-indigo-500"></i>
                   </div>
                   <div class="sm:max-w-[100px] sm:truncate" [title]="file?.name">
-                    {{file?.name}}
+                    <div>
+                      {{file?.name}}
+                    </div>
+                    <div>
+                      <span class="text-[10px] text-gray-400/20">
+                        Access - ({{file?.filePermissions?.read ? 'read' : '-'}},
+                        {{file?.filePermissions?.write ? 'write' : '-'}})
+                      </span>
+                    </div>
                   </div>
                 </div>
               </td>
