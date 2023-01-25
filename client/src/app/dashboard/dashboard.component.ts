@@ -1,5 +1,5 @@
 import { HttpClientModule } from '@angular/common/http';
-import { Component, OnInit, Self } from '@angular/core';
+import { Component, OnInit, } from '@angular/core';
 import { FileService } from '../shared/data-access/file.service';
 import { Observable } from 'rxjs';
 import { File, FileResponse } from '../shared/models/file';
@@ -17,6 +17,8 @@ import { SizeUnitPipe } from '../shared/utils/pipes/size-unit.pipe';
 })
 export class DashboardComponent implements OnInit {
   private unsubscribe = new Subject<void>();
+
+  // Code is unused, but keeping it here to show how, inline details, and the file details component could be used.
   selectedFile = new BehaviorSubject<File>({
     name: "",
     type: "",
