@@ -4,9 +4,7 @@ import { FileResponse } from '../models/file';
 import { catchError, Observable, of } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class FileService {
   baseApiUrl: string = environment.apiBaseUrl;
 

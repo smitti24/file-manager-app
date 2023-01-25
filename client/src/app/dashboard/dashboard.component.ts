@@ -1,5 +1,5 @@
 import { HttpClientModule } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Self } from '@angular/core';
 import { FileService } from '../shared/data-access/file.service';
 import { Observable } from 'rxjs';
 import { File, FileResponse } from '../shared/models/file';
@@ -38,7 +38,7 @@ export class DashboardComponent implements OnInit {
   showDropdown = false;
   files$: Observable<FileResponse> = this.getAllFiles();
 
-  constructor(public fileService: FileService) { }
+  constructor(@Self() public fileService: FileService) { }
 
   ngOnInit(): void { }
 
