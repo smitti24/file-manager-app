@@ -1,5 +1,5 @@
 import { HttpClientModule } from '@angular/common/http';
-import { Component, OnInit, } from '@angular/core';
+import { Component, OnInit, Self } from '@angular/core';
 import { FileService } from '../shared/data-access/file.service';
 import { Observable } from 'rxjs';
 import { File, FileResponse } from '../shared/models/file';
